@@ -68,11 +68,18 @@
       },
       validate: function(user, pass){
         this.warn = false;
+        const validate = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
         if(user == "" || pass == ""){
           this.warn = true;
           this.advise = 'Favor preencher todos os dados'
           return false;
+        }
+
+        if(!validate.test(user)){
+          this.warn = true;
+          this.advise = 'Favor colocar um e-mail válido'
+          return false
         }
 
         return true
