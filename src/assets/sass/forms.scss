@@ -1,0 +1,50 @@
+.login{
+  margin-top: 50px;
+}
+
+.btn{
+  border-radius: 50px;
+    background: #42b883;
+
+  &:hover{
+    background: #35495e;
+  }
+
+}
+
+.loop{
+  animation: spin .7s linear infinite;
+}
+
+@keyframes spin {
+  0% {transform: rotate(0deg)}
+  100% {transform: rotate(180deg)}
+}
+
+.input-field{
+  label{
+    color: #42b883;
+  }
+
+  input{
+    color: #42b883;
+    margin-top: 10px;
+  }
+}
+
+/* MEDIA QUERY MOBILE FIRST ------------------------------------------------------------*/
+  //
+  /* Small devices (smartphones, 320px and up) */
+  @media (min-width: 320px) {}
+
+  /* Small devices (tablets, 600px and up) */
+  @media (min-width: 600px) {}
+
+  /* Medium devices (desktops, 992px and up) */
+  @media (min-width: 992px) {
+    .input-field{
+      input{
+        padding-left: 10px;
+      }
+    }
+  }
