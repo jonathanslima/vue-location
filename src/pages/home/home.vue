@@ -1,25 +1,42 @@
 <template>
-  <div id="app">
-    <h1>{{name}}</h1>
+  <div id="home">
+    <headerApp></headerApp>
   </div>
 </template>
 
 <script>
-export default {
-  data () {
-    let userAccess = JSON.parse(sessionStorage.getItem('userAcess')) || '';
+import header from '../../components/header/header.vue'
 
-    if(!userAccess){
-      this.$router.push('/login')
+export default {
+  components: {
+    'headerApp': header,
+
+  },
+  data () {
+    if(!sessionStorage.getItem('userId')){
+
+      fetch('https://reqres.in/api/users?per_page=20')
+        .then(res => res.json())
+        .then(res => {
+          res.data.filter((user)=>{
+            user.email == sessionStorage.getItem('user') ?
+              sessionStorage.setItem('userId', user.id) : null
+          })
+        })
     }
 
     return {
-      name: 'home'
     }
+  },
+  methods: {
   }
 }
 </script>
 
 <style lang="scss" scoped>
+  /* Small devices (tablets, 600px and up) */
+  @media (min-width: 600px) {}
 
+  /* Medium devices (desktops, 992px and up) */
+  @media (min-width: 992px) {}
 </style>

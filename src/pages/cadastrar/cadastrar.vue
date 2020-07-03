@@ -1,5 +1,5 @@
 <template>
-  <div id="register">
+  <div class="formGeneral">
     <div class="row">
       <div class="col s12 center pin-logo">
         <i class="material-icons">location_on</i><br>

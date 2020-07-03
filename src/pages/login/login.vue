@@ -1,5 +1,5 @@
 <template>
-	<div class="login">
+	<div class="formGeneral">
     <div class="row">
       <div class="col s12 center pin-logo">
         <i class="material-icons">location_on</i><br>
@@ -52,7 +52,7 @@
 <script>
 	export default{
 		data(){
-      let userAccess = JSON.parse(sessionStorage.getItem('userAcess')) || '';
+      let userAccess = JSON.parse(sessionStorage.getItem('userAccess')) || '';
       if(userAccess){ this.$router.push('/') }
 
 			return{
@@ -64,7 +64,7 @@
 		},
 		methods: {
 			storeDataLogin: function(res) {
-				sessionStorage.setItem('userAcess', JSON.stringify(res.token));
+				sessionStorage.setItem('userAccess', JSON.stringify(res.token));
       },
       validate: function(user, pass){
         this.warn = false;
@@ -105,11 +105,12 @@
         fetch('https://reqres.in/api/login', params)
           .then(res => res.json())
           .then(res => {
-            console.log(res)
+
             if(res.token){
               this.warn = false;
               this.storeDataLogin(res);
               this.success = true;
+              sessionStorage.setItem('user', user)
       				setTimeout(()=> { this.$router.push('/') }, 1000)
 
             }else{
