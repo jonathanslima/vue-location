@@ -42,10 +42,12 @@
 </template>
 
 <script>
-export default{
+  import services from '../../services';
+
+  export default{
 		data(){
       let userAccess = JSON.parse(sessionStorage.getItem('userAccess')) || '';
-      if(userAccess){ this.$router.push('/') }
+      if(userAccess){ this.$router.push('/login') }
 
 			return{
         loading: false,
@@ -84,19 +86,7 @@ export default{
         if(!this.validate(user, pass)) return;
 
         this.loading = true;
-        let headers = new Headers()
-        let body = JSON.stringify({"email": user,"password": pass});
-        headers.append("Content-Type", "application/json");
-        headers.append("Cookie", "__cfduid=d2c2b21b130105010cbdb455dcbb00ec81593395041");
-
-        let params = {
-          method: 'POST',
-          redirect: 'follow',
-          headers,
-          body
-        };
-        fetch('https://reqres.in/api/register', params)
-          .then(res => res.json())
+        services.register(user, pass)
           .then(res => {
             console.log(res)
             if(res.token){

@@ -7,20 +7,27 @@
         <h2>Editar cadastro</h2>
       </div>
       <form class="form-edit col s12 offset-m3 m6" v-on:submit.prevent>
+        <div class="col s12 center">
+          <small class="red-text" v-if="warn"><b>{{advise}}</b></small>
+        </div>
         <div class="row">
           <div class="input-field col s6">
-            <input id="first_name" type="text" class="validate" autofocus>
-            <label for="first_name">Nome</label>
+            <input id="username" type="text" class="validate" autofocus>
+            <label for="username">Nome</label>
           </div>
           <div class="input-field col s6">
-            <input id="last_name" type="text" class="validate">
-            <label for="last_name">Profissão</label>
+            <input id="job" type="text" class="validate">
+            <label for="job">Profissão</label>
           </div>
         </div>
 
         <div class="row">
           <div class="center">
-            <button class="btn" @click="edit">Salvar</button>
+            <button class="btn" @click="edit">Salvar
+              <i v-if="loading" class="material-icons loop right">loop</i>
+	            <i v-else-if="success" class="material-icons check right">done</i>
+	            <i v-else class="material-icons right"></i>
+            </button>
           </div>
         </div>
       </form>
@@ -30,27 +37,60 @@
 
 <script>
 import header from '../../../components/header/header.vue'
+import services from '../../../services';
 
 export default {
   components: {
     'headerApp': header,
-
   },
   data () {
-
-
     return {
+      loading: false,
+      success: false,
+      warn: false,
+      advise: ''
     }
   },
   methods: {
+    validate: function(user, job){
+      this.warn = false;
+
+      if(user.value == "" || job.value == ""){
+        this.warn = true;
+        this.advise = 'Favor preencher todos os dados'
+        this.loading = false
+        return true;
+      }
+    },
     edit: function(){
-      console.log('editar')
+      let user = document.querySelector('#username');
+      let job = document.querySelector('#job');
+
+      this.loading = true;
+      services.updateUser(user, job)
+        .then(result => {
+          console.log(result)
+          if(this.validate(user, job)) return
+
+          this.success = true;
+          this.loading = false;
+          alert('Usuário atualizado com sucesso!')
+          user.value = ''
+          job.value = ''
+          this.success = false;
+
+        })
+        .catch(error => {
+          this.warn = true;
+          this.advise = 'Ocorreu algum erro, por favor tente novamente.';
+        });
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+  @import "src/assets/sass/forms.scss";
 
   .edit{
     margin-top: 100px;

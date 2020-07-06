@@ -50,6 +50,8 @@
 </template>
 
 <script>
+  import services from '../../services';
+
 	export default{
 		data(){
       let userAccess = JSON.parse(sessionStorage.getItem('userAccess')) || '';
@@ -61,7 +63,7 @@
         warn: false,
         advise: ''
 			}
-		},
+    },
 		methods: {
 			storeDataLogin: function(res) {
 				sessionStorage.setItem('userAccess', JSON.stringify(res.token));
@@ -89,29 +91,16 @@
         let pass = document.querySelector('#password').value;
 
         if(!this.validate(user, pass)) return;
-
         this.loading = true;
-        let headers = new Headers()
-        let body = JSON.stringify({"email": user,"password": pass});
-        headers.append("Content-Type", "application/json");
-        headers.append("Cookie", "__cfduid=d2c2b21b130105010cbdb455dcbb00ec81593395041");
 
-        let params = {
-          method: 'POST',
-          redirect: 'follow',
-          headers,
-          body
-        };
-        fetch('https://reqres.in/api/login', params)
-          .then(res => res.json())
+        services.login(user, pass)
           .then(res => {
-
             if(res.token){
               this.warn = false;
               this.storeDataLogin(res);
               this.success = true;
               sessionStorage.setItem('user', user)
-      				setTimeout(()=> { this.$router.push('/') }, 1000)
+              setTimeout(()=> { this.$router.push('/') }, 1000)
 
             }else{
               this.warn = true;
@@ -123,7 +112,7 @@
           .catch(error => {
             this.warn = true;
             this.advise = 'Ocorreu algum erro, por favor tente novamente.';
-          })
+          });
       }
 		}
 	}

@@ -6,29 +6,32 @@
 
 <script>
 import header from '../../components/header/header.vue'
-
+import services from '../../services'
 export default {
   components: {
     'headerApp': header,
-
   },
   data () {
     if(!sessionStorage.getItem('userId')){
-
-      fetch('https://reqres.in/api/users?per_page=20')
-        .then(res => res.json())
-        .then(res => {
-          res.data.filter((user)=>{
-            user.email == sessionStorage.getItem('user') ?
-              sessionStorage.setItem('userId', user.id) : null
-          })
-        })
+      services.getAllUser();
     }
 
-    return {
-    }
+    this.getLocation()
+
+    return {}
   },
   methods: {
+    getLocation: function() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(this.showPosition);
+      } else {
+        alert("Geolocation is not supported by this browser.");
+      }
+    },
+    showPosition: function(position) {
+      console.log("Latitude: " + position.coords.latitude +
+      "<br>Longitude: " + position.coords.longitude);
+    }
   }
 }
 </script>
